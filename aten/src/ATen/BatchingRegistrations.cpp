@@ -182,7 +182,7 @@ Tensor expand_batching_rule(const Tensor& self, IntArrayRef size, bool implicit)
 }
 
 Tensor expand_batching_rule_symint(const Tensor& self, SymIntArrayRef psize, bool implicit) {
-  return expand_batching_rule(self, expectIntArrayRef(psize), implicit);
+  return expand_batching_rule(self, asIntArrayRefSlow(psize), implicit);
 }
 
 
@@ -1122,6 +1122,9 @@ TORCH_LIBRARY_IMPL(aten, Batched, m) {
   m.impl("unfold", unfold_batching_rule);
   m.impl("unsqueeze", unsqueeze_batching_rule);
   m.impl("view", view_batching_rule);
+  // From the perspective of vmap, view and _unsafe_view are the same.
+  // (they are only different w.r.t. autograd).
+  m.impl("_unsafe_view", view_batching_rule);
   m.impl("view_as", native::view_as); // composite wrt autograd
 
   // clamp operations
