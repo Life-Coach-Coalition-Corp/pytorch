@@ -334,3 +334,4 @@ buck-out/
 third_party/ruy/
 third_party/glog/
 third_party/breakpad/
+third_party/benchmark
